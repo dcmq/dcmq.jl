@@ -20,16 +20,16 @@ function consumer_loop(server, queue, methods, dcmhandler; port = AMQPClient.AMQ
     auth_params = Dict{String,Any}("MECHANISM"=>"AMQPLAIN", "LOGIN"=>login, "PASSWORD"=>password)
 
     conn = connection(;virtualhost="/", host=server, port=port, auth_params=auth_params)
-    channel = channel(conn, AMQPClient.UNUSED_CHANNEL, true)
-    exchange_declare(channel, "dicom", EXCHANGE_TYPE_TOPIC)
-    queue_declare(channel, queue)
+    chan = channel(conn, AMQPClient.UNUSED_CHANNEL, true)
+    exchange_declare(chan, "dicom", EXCHANGE_TYPE_TOPIC)
+    queue_declare(chan, queue)
     for method = methods
-        queue_bind(channel, queue, "dicom", method)
+        queue_bind(chan, queue, "dicom", method)
     end
 
     println("entering polling loop")
     while true
-        maybe_msg = basic_get(channel, queue, false)
+        maybe_msg = basic_get(chan, queue, false)
         # check if we got a message
         if !isnothing(maybe_msg)
             println("message received")
@@ -38,11 +38,11 @@ function consumer_loop(server, queue, methods, dcmhandler; port = AMQPClient.AMQ
                 io = IOBuffer(msg.data)
                 d = dcm_parse(io)
                 uri = extractHeaders(msg)["uri"]
-                dcmhandler(channel, d, uri)
-                basic_ack(channel, msg.delivery_tag)
+                dcmhandler(chan, d, uri)
+                basic_ack(chan, msg.delivery_tag)
             catch e
                 println(e)
-                basic_reject(channel, msg.delivery_tag; requeue=true)
+                basic_reject(chan, msg.delivery_tag; requeue=true)
                 throw(e)
             end
         else
