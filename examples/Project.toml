@@ -1,0 +1,6 @@
+[deps]
+DCMQ = "1e67696d-e733-4156-a8be-66b38dff9cd1"
+DICOM = "a26e6606-dd52-5f6a-a97f-4f611373d757"
+DSCMRI = "190a4fba-c66c-11e9-334c-414ee87e4cce"
+NIfTI = "a3a9e032-41b5-5fc4-967a-a6b7a19844d3"
+Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"

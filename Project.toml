@@ -1,0 +1,8 @@
+name = "DCMQ"
+uuid = "1e67696d-e733-4156-a8be-66b38dff9cd1"
+authors = ["vsaase <vsaase@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+AMQPClient = "79c8b4cd-a41a-55fa-907c-fab5288e1383"
+DICOM = "a26e6606-dd52-5f6a-a97f-4f611373d757"
