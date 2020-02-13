@@ -46,7 +46,7 @@ function dcmhandler(channel, d, uri)
         filepath = "$outdir/$(d[tag"Series Instance UID"])_$key.nii"
         NIfTI.niwrite(filepath, vox)
         dcmout = copy(d)
-        dcmout[tag"Series Description"] *= " $key"
+        dcmout[tag"Series Description"] = "$key NOT FOR CLINICAL USE"
         dcmout[tag"Image Type"][1] = "DERIVED"
         dcmout[tag"Image Type"][2] = "SECONDARY"
         dcmout[tag"Image Type"][3] = "RESAMPLED"
