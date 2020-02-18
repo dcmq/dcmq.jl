@@ -21,10 +21,9 @@ function consumer_loop(server, queue, methods, dcmhandler; port = AMQPClient.AMQ
 
     conn = connection(;virtualhost="/", host=server, port=port, auth_params=auth_params)
     chan = channel(conn, AMQPClient.UNUSED_CHANNEL, true)
-    exchange_declare(chan, "dicom", EXCHANGE_TYPE_TOPIC)
     queue_declare(chan, queue)
     for method = methods
-        queue_bind(chan, queue, "dicom", method)
+        queue_bind(chan, queue, "amq.topic", method)
     end
 
     println("entering polling loop")
