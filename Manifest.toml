@@ -1,0 +1,18 @@
+# This file is machine-generated - editing it directly is not advised
+
+[[AMQPClient]]
+deps = ["Logging", "Sockets"]
+git-tree-sha1 = "35b77f1e636bf96ed92a7bef55be4670b674fe3b"
+uuid = "79c8b4cd-a41a-55fa-907c-fab5288e1383"
+version = "0.3.0"
+
+[[DICOM]]
+git-tree-sha1 = "b6fc6a57d09aa8b6a8ac1de97b8f589e5c2db416"
+uuid = "a26e6606-dd52-5f6a-a97f-4f611373d757"
+version = "0.6.2"
+
+[[Logging]]
+uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
+
+[[Sockets]]
+uuid = "6462fe0b-24de-5631-8697-dd941f90decc"
