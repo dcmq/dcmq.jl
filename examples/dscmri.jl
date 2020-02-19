@@ -51,7 +51,7 @@ function dcmhandler(channel, d, uri)
         dcmout[tag"Image Type"][2] = "SECONDARY"
         dcmout[tag"Image Type"][3] = "RESAMPLED"
 
-        publish_nifti(channel, dcmout, filepath)
+        publish(channel, "stored.series.nii", dcmout, uri=filepath)
     end
     
     delete!(mprage_uri, study_uid)

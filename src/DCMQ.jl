@@ -4,14 +4,18 @@ using DICOM
 
 export consumer_loop, publish_nifti
 
-function publish_nifti(channel, dcmout, uri)
+function publish(channel, routing_key, dcmout; uri="")
     if tag"Pixel Data" in keys(dcmout)
         delete!(dcmout, tag"Pixel Data")
     end
     io = IOBuffer()
     dcm_write(io, dcmout)
-    msg_out = Message(io.data, headers=Dict{String,Any}("uri" => uri))
-    basic_publish(channel, msg_out; exchange="dicom", routing_key="stored.series.nii")
+    headers = Dict{String,Any}()
+    if uri != ""
+        headers["uri"] = uri
+    end
+    msg_out = Message(io.data, headers=headers)
+    basic_publish(channel, msg_out; exchange="dicom", routing_key=routing_key)
 end
 
 function consumer_loop(server, queue, methods, dcmhandler; port = AMQPClient.AMQP_DEFAULT_PORT)
@@ -21,10 +25,9 @@ function consumer_loop(server, queue, methods, dcmhandler; port = AMQPClient.AMQ
 
     conn = connection(;virtualhost="/", host=server, port=port, auth_params=auth_params)
     chan = channel(conn, AMQPClient.UNUSED_CHANNEL, true)
-    exchange_declare(chan, "dicom", EXCHANGE_TYPE_TOPIC)
     queue_declare(chan, queue)
     for method = methods
-        queue_bind(chan, queue, "dicom", method)
+        queue_bind(chan, queue, "amq.topic", method)
     end
 
     println("entering polling loop")
